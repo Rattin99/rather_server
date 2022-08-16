@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.get('/posts',(req,res) =>{
 
-    const sql  = `SELECT * FROM rather_db.posts;`
+    const sql  = `SELECT * FROM rather_db.posts ORDER BY post_time;`
 
     db.query(sql,(err,result) =>{
         if(err) throw err;

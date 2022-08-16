@@ -6,6 +6,7 @@ const getPost = require('./routers/getPosts')
 const post = require('./routers/post')
 const imagePost = require('./routers/imagePost')
 const geturls = require('./routers/geturls');
+const rank = require('./routers/rank')
 
 app.use(cors({
     origin: "*",
@@ -19,6 +20,7 @@ app.use(getPost)
 app.use(post)
 app.use(imagePost)
 app.use(geturls)
+app.use(rank)
 
 
 app.listen(5000, () =>{
