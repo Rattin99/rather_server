@@ -5,18 +5,15 @@ const db = require('../db/db')
 const router = express.Router();
 
 
+router.get('/info/:id',(req,res) =>{
+    const postid = req.params.id;
 
-router.get('/posts',(req,res) =>{
-
-    const sql  = `SELECT * FROM rather_db.posts ORDER BY post_time DESC;`
+    const sql = `SELECT post_visits,post_ranked_by,post_text FROM posts WHERE post_id = '${postid}';`
 
     db.query(sql,(err,result) =>{
         if(err) throw err;
         res.send(result)
     })
-
 })
-
-
 
 module.exports = router;

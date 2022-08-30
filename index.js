@@ -1,12 +1,13 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const { json } = require('express/lib/response');
 const getPost = require('./routers/getPosts')
 const post = require('./routers/post')
 const imagePost = require('./routers/imagePost')
 const geturls = require('./routers/geturls');
 const rank = require('./routers/rank')
+const getRanked = require('./routers/getRanked')
+const getinfo = require('./routers/getinfo');
 
 app.use(cors({
     origin: "*",
@@ -21,7 +22,7 @@ app.use(post)
 app.use(imagePost)
 app.use(geturls)
 app.use(rank)
-
+app.use(getRanked)
 
 app.listen(5000, () =>{
     console.log('listening on port 5000')
