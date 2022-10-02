@@ -9,6 +9,7 @@ router.post('/post/rank/:id', (req,res) =>{
     const postId = req.params.id;
     const imageArray = req.body.imageArray;
 
+
     let  sql = '';
 
     imageArray.map((value,index) =>{
@@ -22,7 +23,7 @@ router.post('/post/rank/:id', (req,res) =>{
 
     db.query(sql,(err,result) =>{
         if(err) throw err;
-        res.send(result);
+        res.status(200).json(result)
     })
 
 })

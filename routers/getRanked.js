@@ -8,7 +8,8 @@ const router = express.Router();
 router.use('/get/rankedlist/:id',(req,res) =>{
     const postid = req.params.id;
 
-    const sql = `SELECT * FROM images
+    const sql = `
+    SELECT * FROM images
 	WHERE images.post_id = '${postid}' ORDER BY ranking DESC;
     UPDATE posts SET post_ranked_by = post_ranked_by+1
     WHERE post_id = '${postid}';
@@ -19,7 +20,7 @@ router.use('/get/rankedlist/:id',(req,res) =>{
 
     db.query(sql,(err,result) =>{
         if(err) throw err;
-        console.log(result)
+        
         res.send(result)
     })
 })
