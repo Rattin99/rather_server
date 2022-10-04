@@ -9,6 +9,7 @@ const rank = require('./routers/rank')
 const getRanked = require('./routers/getRanked')
 const getinfo = require('./routers/getinfo');
 const user = require('./routers/user')
+const check = require('./routers/check');
 
 
 
@@ -29,6 +30,7 @@ app.use(geturls)
 app.use(rank)
 app.use(getRanked)
 app.use(user)
+app.use(check)
 
 app.listen(5000, () =>{
     console.log('listening on port 5000')

@@ -11,7 +11,7 @@ router.use('/get/rankedlist/:id',(req,res) =>{
     const sql = `
     SELECT * FROM images
 	WHERE images.post_id = '${postid}' ORDER BY ranking DESC;
-    UPDATE posts SET post_ranked_by = post_ranked_by+1
+    UPDATE posts SET post_visits = post_visits+1
     WHERE post_id = '${postid}';
     SELECT post_visits,post_ranked_by,post_text
     FROM posts
