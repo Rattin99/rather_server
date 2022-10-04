@@ -9,7 +9,8 @@ router.get('/urls/:id',(req,res) =>{
     const postid = req.params.id;
 
     const sql = `SELECT * FROM images
-	WHERE images.post_id = '${postid}';`
+	WHERE images.post_id = '${postid}';
+    SELECT post_text FROM posts WHERE post_id = '${postid}'`;
 
     db.query(sql,(err,result) =>{
         if(err) throw err;

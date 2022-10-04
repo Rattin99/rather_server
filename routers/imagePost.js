@@ -7,8 +7,9 @@ const router = express.Router();
 router.post('/post/url/:id',(req,res) =>{
     const postId = req.body.postid;
     const download_url = req.body.downloadURL;
+    const caption = req.body.caption;
 
-    const sql = `INSERT INTO images(image_url,post_id) VALUES('${download_url}','${postId}');`
+    const sql = `INSERT INTO images(image_url,post_id,caption) VALUES('${download_url}','${postId}','${caption}');`
 
     db.query(sql,(err,result) =>{
         if(err) throw err;

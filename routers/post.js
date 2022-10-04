@@ -9,7 +9,7 @@ router.post('/post',(req,res) =>{
 
     const title = req.body.title;
     const postid = req.body.postid;
-    const post_text = req.body.post_text;
+    const post_text = req.body.text;
     const time = new Date().toLocaleTimeString();
     const date = new Date().toLocaleDateString().split("/").reverse().join("-");
 
