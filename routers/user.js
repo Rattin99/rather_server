@@ -3,12 +3,12 @@ const db = require('../db/db')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { v4: uuidv4 } = require('uuid');
-
+const SqlString = require('sqlstring');
 
 
 const router = express.Router();
 
-router.post('/signup',(req,res) => {
+router.post('/signup', async (req,res) => {
     const {email,password,invite} = req.body;
 
     try{
@@ -28,8 +28,8 @@ router.post('/login', async (req,res) => {
    
    
    
-   const sql = `SELECT user_id,hashed_password FROM users WHERE email = '${email}';`
-
+   const sql = SqlString.format(`SELECT user_id,hashed_password FROM users WHERE email = email;`,[email])
+   
    db.query(sql,(err,result) => {
 
        if(err) throw err;
@@ -90,56 +90,56 @@ function validate (email,password,invite) {
     }
 }
 
-//not gonna use this 
-const createToken = (invite) => {
-   return  jwt.sign({invite},process.env.SECRET)
-}
 
-
-function signup(email,password,invite,res) {
-    const hash = encrypt(password);
+async function signup(email,password,invite,res) {
+    const hash = await encrypt(password);
     const user_id = uuidv4();
 
-    const inviteCheck = `SELECT invite FROM rather_db.invites WHERE invite = '${invite}';`
+    const inviteCheck = SqlString.format(`SELECT invite FROM rather_db.invites WHERE invite = ?;`,[invite])
 
-    db.query(inviteCheck,[email,hash,user_id],(err,result) => {
-        if(err) throw err;
+    try{
 
+        const result = await new Promise((res, rej) =>  db.query(inviteCheck,[email,hash,user_id],async (err,result) => {
+            if(err) rej(err);
+            res(result)
+        }))
         if(result.length == 1) {
-
-          hash.then((value => addToDB(email,value,user_id,invite,db,res)))
-            
+            await addToDB(email,hash,user_id,invite,db,res)
         }
-
+        
         if(result.length == 0) res.status(404).json('invalid referral')
         
-    })
+    }catch(err){
 
+    }
     return res
 }
 
 
-function addToDB(email,hash,user_id,invite,db,res){
+async function addToDB(email,hash,user_id,invite,db,res){
 
-    const sql = `START TRANSACTION; 
+    const sql = SqlString.format(`START TRANSACTION; 
 
-                    INSERT INTO users(email,hashed_password,user_id)
-                    VALUES ('${email}','${hash}','${user_id}');
-                        
-                    DELETE FROM invites WHERE  invite = '${invite}';
-                    
-                    COMMIT;`
+    INSERT INTO users(email,hashed_password,user_id)
+    VALUES (?,?,?);
+        
+    DELETE FROM invites WHERE  invite = '${invite}';
+    
+    COMMIT;`,[email,hash,user_id])
 
-
-    db.query(sql,(err,result) =>{
+    try{
+    const result = new Promise((res, rej) => db.query(sql,(err,result) =>{
        if(err) {
-            if(err.sqlState = "2300") res.status(400).json(err)
-
-            else throw err;
-
-           
+        rej(err)
         }
+        res(result)
 
-        res.status(200).json(result);
-    })
+    }))
+    res.status(200).json(result);
+}
+    catch(err){
+        if(err.sqlState = "2300") res.status(400).json(err)
+
+        // else throw err;
+    }
 }
