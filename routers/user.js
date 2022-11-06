@@ -104,6 +104,7 @@ async function signup(email,password,invite,res) {
             if(err) rej(err);
             res(result)
         }))
+        console.log(result)
         if(result.length == 1) {
             await addToDB(email,hash,user_id,invite,db,res)
         }
@@ -139,9 +140,10 @@ async function addToDB(email,hash,user_id,invite,db,res){
 
     }))
     res.status(200).json({result:"signup successful"});
+    console.log(result)
     }catch(err){
         if(err.sqlState = "2300") res.status(400).json(err)
 
-        // else throw err;
+        throw err;
     }
 }
