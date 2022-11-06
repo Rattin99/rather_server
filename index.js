@@ -7,7 +7,6 @@ const imagePost = require('./routers/imagePost')
 const geturls = require('./routers/geturls');
 const rank = require('./routers/rank')
 const getRanked = require('./routers/getRanked')
-const getinfo = require('./routers/getinfo');
 const user = require('./routers/user')
 const check = require('./routers/check');
 const search = require('./routers/Search')
