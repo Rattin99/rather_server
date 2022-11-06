@@ -8,7 +8,10 @@ const router = express.Router();
 
 router.get('/posts',(req,res) =>{
 
-    const sql  = `SELECT * FROM rather_db.posts ORDER BY post_time DESC;`
+    const {start,limit} = req.query;
+    
+
+    const sql  = `SELECT * FROM rather_db.posts ORDER BY post_time DESC LIMIT ${start},${limit};`
 
     db.query(sql,(err,result) =>{
         if(err) throw err;

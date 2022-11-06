@@ -10,7 +10,7 @@ const getRanked = require('./routers/getRanked')
 const getinfo = require('./routers/getinfo');
 const user = require('./routers/user')
 const check = require('./routers/check');
-
+const search = require('./routers/Search')
 
 
 require('dotenv').config()
@@ -31,6 +31,7 @@ app.use(rank)
 app.use(getRanked)
 app.use(user)
 app.use(check)
+app.use(search)
 
 app.listen(5000, () =>{
     console.log('listening on port 5000')

@@ -1,7 +1,6 @@
 const express = require('express');
 const db = require('../db/db')
 const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
 const { v4: uuidv4 } = require('uuid');
 const SqlString = require('sqlstring');
 
@@ -27,26 +26,25 @@ router.post('/login', async (req,res) => {
    const {email,password} = req.body;
    
    
-   
-   const sql = SqlString.format(`SELECT user_id,hashed_password FROM users WHERE email = email;`,[email])
+   const sql = SqlString.format(`SELECT user_id,hashed_password FROM users WHERE email = ?;`,[email])
    
    db.query(sql,(err,result) => {
 
        if(err) throw err;
 
-       if(result.length == 0) res.status(400).json('email does not exist');
+       if(result.length == 0) res.status(400).json({error:'email does not exist',user_id:null});
 
        else{
         const {user_id,hashed_password}  = result[0]
 
         bcrypt.compare(password,hashed_password,(error,re) =>{
-            if(re) res.status(200).json({user_id});
-            else res.status(400).json('passwod does not match')
+            if(error) throw error;
+
+            if(re) res.status(200).json({user_id,error:null});
+            else res.status(400).json({error:'password does not match',user_id:null})
         })
        }
-       
-   
-      
+
    })
 
 })
@@ -107,7 +105,7 @@ async function signup(email,password,invite,res) {
             await addToDB(email,hash,user_id,invite,db,res)
         }
         
-        if(result.length == 0) res.status(404).json('invalid referral')
+        if(result.length == 0) res.status(404).json({error: 'invalid referral'})
         
     }catch(err){
 
@@ -135,9 +133,8 @@ async function addToDB(email,hash,user_id,invite,db,res){
         res(result)
 
     }))
-    res.status(200).json(result);
-}
-    catch(err){
+    res.status(200).json({result:"signup successful"});
+    }catch(err){
         if(err.sqlState = "2300") res.status(400).json(err)
 
         // else throw err;
