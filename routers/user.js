@@ -97,6 +97,7 @@ async function signup(email,password,invite,res) {
 
     const inviteCheck = SqlString.format(`SELECT invite FROM rather_db.invites WHERE invite = ?;`,[invite])
 
+    console.log("sign up function called")
     try{
 
         const result = await new Promise((res, rej) =>  db.query(inviteCheck,[email,hash,user_id],async (err,result) => {
@@ -110,7 +111,7 @@ async function signup(email,password,invite,res) {
         if(result.length == 0) res.status(404).json({error: 'invalid referral'})
         
     }catch(err){
-
+        res.status(404).json("ERROR")
     }
     return res
 }
@@ -126,6 +127,8 @@ async function addToDB(email,hash,user_id,invite,db,res){
     DELETE FROM invites WHERE  invite = '${invite}';
     
     COMMIT;`,[email,hash,user_id])
+
+    console.log("adding to db")
 
     try{
     const result = new Promise((res, rej) => db.query(sql,(err,result) =>{
