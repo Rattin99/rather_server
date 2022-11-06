@@ -10,6 +10,8 @@ const router = express.Router();
 router.post('/signup', async (req,res) => {
     const {email,password,invite} = req.body;
 
+    console.log("signing up")
+
     try{
       
         validate(email,password,invite);
