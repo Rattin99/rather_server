@@ -33,7 +33,7 @@ app.use(user)
 app.use(check)
 app.use(search)
 
-const port = process.env.PORT || 5000
+const port = `0.0.0.0:$PORT`;
 
 app.listen(port, () =>{
     console.log(`listening on port ${port}`)
