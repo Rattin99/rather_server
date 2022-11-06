@@ -95,7 +95,7 @@ async function signup(email,password,invite,res) {
     const hash = await encrypt(password);
     const user_id = uuidv4();
 
-    const inviteCheck = SqlString.format(`SELECT invite FROM rather_db.invites WHERE invite = ?;`,[invite])
+    const inviteCheck = SqlString.format(`SELECT invite FROM invites WHERE invite = ?;`,[invite])
 
     console.log("sign up function called")
     try{
