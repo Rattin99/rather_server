@@ -10,7 +10,6 @@ router.get('/posts',(req,res) =>{
 
     const {start,limit} = req.query;
 
-    if(start || limit) return;
     
 
     const sql  = `SELECT * FROM posts ORDER BY post_time DESC LIMIT ${start},${limit};`
